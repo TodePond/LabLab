@@ -2,6 +2,8 @@ export const fragmentShaderSource = `#version 300 es
 precision highp float;
 
 uniform vec2 resolution;
+uniform float time;
+
 out vec4 colour;
 
 const vec4 VOID = vec4(6.0 / 255.0, 7.0 / 255.0, 10.0 / 255.0, 1.0);
@@ -30,7 +32,6 @@ vec4 bilerp(vec4 a, vec4 b, vec4 c, vec4 d, vec2 t) {
 const vec4[] GRADIENT = vec4[](
 	GREEN,
 	BLUE,
-	BLACK,
 	RED
 );
 
@@ -41,10 +42,14 @@ vec4 gradient(float t) {
 	return lerp(GRADIENT[index], GRADIENT[index + 1], t2);
 }
 
+vec4 average(vec4 a, vec4 b) {
+	return lerp(a, b, 0.5);
+}
+
 void main() {
 
 	vec2 position = gl_FragCoord.xy / resolution;
 
-	colour = gradient(position.x);
+	colour = lerp(gradient(position.x), gradient(position.y), sin(time));
 }
 `
