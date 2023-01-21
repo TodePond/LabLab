@@ -95,6 +95,7 @@ vec4 mandelbrot(vec2 position) {
 	vec2 z = vec2(0.0, 0.0);
 	float i = 0.0;
 	float max = 45.0;
+	float excess = 0.0;
 	for (i = 0.0; i < max; i += 1.0) {
 
 		float x = z.x;
@@ -105,8 +106,9 @@ vec4 mandelbrot(vec2 position) {
 		float end = -(y * y);
 
 		z = vec2(start + end, middle) + c;
-		if (z.x * z.x + z.y * z.y > 10.0) {
-			break;
+		excess = z.x * z.x + z.y * z.y - (pointer.x * 25.0);
+		if (excess > 0.0) {
+			break;	
 		}
 	}
 
@@ -114,7 +116,7 @@ vec4 mandelbrot(vec2 position) {
 		return VOID;
 	}
 
-	return gradientLoop(i / max);
+	return gradientLoop(i / max + excess / (pointer.y * 25.0));
 }
 
 vec4 getColour(vec2 position) {
@@ -123,7 +125,7 @@ vec4 getColour(vec2 position) {
 
 void main() {
 	vec2 position = canvasToView(gl_FragCoord.xy);
-	vec2 adjustedPosition = (position - vec2(0.73, 0.5)) * 3.0;
+	vec2 adjustedPosition = (position - vec2(0.6, 0.5)) * 3.0;
 	colour = getColour(adjustedPosition);
 }
 `
