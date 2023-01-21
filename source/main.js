@@ -44,4 +44,7 @@ stage.tick = (gl) => {
 
 stage.resize = (gl) => {
 	gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
+
+	const resolutionUniformLocation = gl.getUniformLocation(stage.program, "u_resolution")
+	gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height)
 }
