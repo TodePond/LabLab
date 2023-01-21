@@ -83,9 +83,16 @@ vec2 canvasToView(vec2 position) {
 	return position / resolution;
 }
 
+vec2 center(vec2 position) {
+	return position - vec2(0.5, 0.5);
+}
+
 vec4 mandelbrot(vec2 position) {
+
+	vec2 pointer = center(canvasToView(pointer));
+
 	vec2 c = position;
-	vec2 z = vec2(0.0, 0.0 + pulse(1.0));
+	vec2 z = vec2(0.0, 0.0);
 	float i = 0.0;
 	float max = 45.0;
 	for (i = 0.0; i < max; i += 1.0) {
