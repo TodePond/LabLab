@@ -10,17 +10,17 @@ const HabitatFrogasaurus = {}
 	//====== ./habitat.js ======
 	{
 		HabitatFrogasaurus["./habitat.js"] = {}
-		
+
 		const registerMethods = () => {
 			registerDebugMethods()
 			registerColourMethods()
 			registerVectorMethods()
 		}
-		
+
 		const registerGlobals = () => {
 			Object.assign(window, Habitat)
 		}
-		
+
 		const registerEverything = () => {
 			registerGlobals()
 			registerMethods()
@@ -37,7 +37,7 @@ const HabitatFrogasaurus = {}
 		const HTML = (source) => {
 			const template = document.createElement("template")
 			template.innerHTML = source
-			const {content} = template
+			const { content } = template
 			if (content.childElementCount === 1) {
 				return content.firstChild
 			}
@@ -55,25 +55,25 @@ const HabitatFrogasaurus = {}
 			if (number > max) return max
 			return number
 		}
-		
+
 		const wrap = (number, min, max) => {
 			const range = max - min + 1
 			while (number < min) number += range
 			while (number > max) number -= range
 			return number
 		}
-		
+
 		const getDigits = (number) => {
 			const chars = number.toString().split("")
-			const digits = chars.map(v => parseInt(v)).filter(v => !isNaN(v))
+			const digits = chars.map((v) => parseInt(v)).filter((v) => !isNaN(v))
 			return digits
 		}
-		
+
 		const gcd = (...numbers) => {
 			const [head, ...tail] = numbers
 			if (numbers.length === 1) return head
 			if (numbers.length > 2) return gcd(head, gcd(...tail))
-			
+
 			let [a, b] = [head, ...tail]
 			while (true) {
 				if (b === 0) return a
@@ -82,21 +82,24 @@ const HabitatFrogasaurus = {}
 				b = b % a
 			}
 		}
-		
+
 		const simplifyRatio = (...numbers) => {
 			const divisor = gcd(...numbers)
-			return numbers.map(n => n / divisor)
+			return numbers.map((n) => n / divisor)
 		}
-		
+
 		const range = function* (start, end) {
 			let i = start
-			if (i <= end) do {
-				yield i
-				i++
-			} while (i <= end) else while (i >= end) {
-				yield i
-				i--
-			}
+			if (i <= end)
+				do {
+					yield i
+					i++
+				} while (i <= end)
+			else
+				while (i >= end) {
+					yield i
+					i--
+				}
 		}
 
 		HabitatFrogasaurus["./number.js"].clamp = clamp
@@ -117,7 +120,7 @@ const HabitatFrogasaurus = {}
 				if (cache.has(key)) {
 					return cache.get(key)
 				}
-		
+
 				const result = func(...args)
 				cache.set(key, result)
 				return result
@@ -133,7 +136,7 @@ const HabitatFrogasaurus = {}
 		const maxRandomNumberIndex = 2 ** 14
 		const randomNumbersBuffer = new Uint32Array(maxRandomNumberIndex)
 		let randomNumberIndex = Infinity
-		
+
 		const random = () => {
 			if (randomNumberIndex >= maxRandomNumberIndex) {
 				crypto.getRandomValues(randomNumbersBuffer)
@@ -143,15 +146,14 @@ const HabitatFrogasaurus = {}
 			randomNumberIndex++
 			return result
 		}
-		
+
 		const randomFrom = (array) => {
 			const index = random() % array.length
 			return array[index]
 		}
-		
+
 		const oneIn = (times) => random() % times < 1
 		const maybe = (chance) => oneIn(1 / chance)
-		
 
 		HabitatFrogasaurus["./random.js"].random = random
 		HabitatFrogasaurus["./random.js"].randomFrom = randomFrom
@@ -163,14 +165,14 @@ const HabitatFrogasaurus = {}
 	{
 		HabitatFrogasaurus["./event.js"] = {}
 		const fireEvent = (name, options = {}) => {
-			const {target = window, bubbles = true, cancelable = true, ...data} = options
-			const event = new Event(name, {bubbles, cancelable})
+			const { target = window, bubbles = true, cancelable = true, ...data } = options
+			const event = new Event(name, { bubbles, cancelable })
 			for (const key in data) {
 				event[key] = data[key]
 			}
 			target.dispatchEvent(event)
 		}
-		
+
 		const on = (event, func, options) => {
 			return addEventListener(event, func, options)
 		}
@@ -182,30 +184,28 @@ const HabitatFrogasaurus = {}
 	//====== ./console.js ======
 	{
 		HabitatFrogasaurus["./console.js"] = {}
-		
+
 		const print = console.log.bind(console)
-		
+
 		let printCount = 0
 		const print9 = (message) => {
 			if (printCount > 9) return
 			printCount++
 			print(message)
 		}
-		
+
 		const registerDebugMethods = () => {
-			
-			defineGetter(Object.prototype, "d", function() {
+			defineGetter(Object.prototype, "d", function () {
 				const value = this.valueOf()
 				print(value)
 				return value
 			})
-			
-			defineGetter(Object.prototype, "d9", function() {
+
+			defineGetter(Object.prototype, "d9", function () {
 				const value = this.valueOf()
 				print9(value)
 				return value
 			})
-		
 		}
 
 		HabitatFrogasaurus["./console.js"].print = print
@@ -224,14 +224,14 @@ const HabitatFrogasaurus = {}
 						value,
 						configurable: true,
 						writable: true,
-						enumerable: true
+						enumerable: true,
 					})
 				},
 				configurable: true,
 				enumerable: false,
 			})
 		}
-		
+
 		const defineAccessor = (object, name, get, set) => {
 			return Reflect.defineProperty(object, name, {
 				get,
@@ -253,12 +253,12 @@ const HabitatFrogasaurus = {}
 				this.start = undefined
 				this.end = undefined
 				this.isEmpty = true
-		
+
 				for (const value of iterable) {
 					this.push(value)
 				}
 			}
-			
+
 			*[Symbol.iterator]() {
 				let link = this.start
 				while (link !== undefined) {
@@ -266,11 +266,11 @@ const HabitatFrogasaurus = {}
 					link = link.next
 				}
 			}
-		
+
 			toString() {
 				return [...this].toString()
 			}
-		
+
 			push(...values) {
 				for (const value of values) {
 					const link = makeLink(value)
@@ -285,56 +285,55 @@ const HabitatFrogasaurus = {}
 					}
 				}
 			}
-		
+
 			pop() {
 				if (this.isEmpty) {
 					return undefined
 				}
-		
+
 				const value = this.start.value
 				if (this.start === this.end) {
 					this.clear()
 					return value
 				}
-		
+
 				this.end = this.end.previous
 				this.end.next = undefined
 				return value
 			}
-		
+
 			shift() {
 				if (this.isEmpty) {
 					return undefined
 				}
-		
+
 				const value = this.start.value
 				if (this.start === this.end) {
 					this.clear()
 					return value
 				}
-		
+
 				this.start = this.start.next
 				this.start.previous = undefined
 				return value
 			}
-		
+
 			clear() {
 				this.start = undefined
 				this.end = undefined
 				this.isEmpty = true
 			}
-		
+
 			setStart(link) {
 				this.start = link
 				link.previous = undefined
 			}
-		
 		}
-		
+
 		const makeLink = (value) => {
 			const previous = undefined
 			const next = undefined
-			const link = {value, previous, next}
+			const link = { value, previous, next }
 			return link
 		}
 
@@ -344,17 +343,17 @@ const HabitatFrogasaurus = {}
 	//====== ./vector.js ======
 	{
 		HabitatFrogasaurus["./vector.js"] = {}
-		
+
 		const scale = (value, scale) => {
 			if (typeof value === "number") return value * scale
-			return value.map(v => v * scale)
+			return value.map((v) => v * scale)
 		}
-		
+
 		const add = (a, b) => {
 			if (typeof a === "number") {
 				return a + b
 			}
-			
+
 			if (a.length === 2) {
 				const [ax, ay] = a
 				const [bx, by] = b
@@ -370,12 +369,12 @@ const HabitatFrogasaurus = {}
 				return [x, y, z]
 			}
 		}
-		
+
 		const subtract = (a, b) => {
 			if (typeof a === "number") {
 				return a - b
 			}
-		
+
 			if (a.length === 2) {
 				const [ax, ay] = a
 				const [bx, by] = b
@@ -391,74 +390,75 @@ const HabitatFrogasaurus = {}
 				return [x, y, z]
 			}
 		}
-		
+
 		const crossProduct = (a, b) => {
 			if (a.length === 2) {
 				const [ax, ay] = a
 				const [bx, by] = b
-				return ax*by - ay*bx
+				return ax * by - ay * bx
 			} else {
 				const [ax, ay, az] = a
 				const [bx, by, bz] = b
-				return [ay*bz - az*by, az*bx - ax*bz, ax*by - ay*bx]
+				return [ay * bz - az * by, az * bx - ax * bz, ax * by - ay * bx]
 			}
 		}
-		
+
 		const distanceBetween = (a, b) => {
 			if (typeof a === "number") {
 				return Math.abs(a - b)
 			}
-		
+
 			const displacement = subtractVector(a, b)
 			const [dx, dy, dz = 0] = displacement
 			const distance = Math.hypot(dx, dy, dz)
 			return distance
 		}
-		
+
 		const angleBetween = (a, b) => {
 			if (a.length !== 2) {
-				throw new Error('[Habitat] Sorry, only 2D vectors are supported at the moment. Please bug @todepond to support other lengths :)')
+				throw new Error(
+					"[Habitat] Sorry, only 2D vectors are supported at the moment. Please bug @todepond to support other lengths :)",
+				)
 			}
 			const displacement = subtractVector(a, b)
 			const [dx, dy] = displacement
 			const angle = Math.atan2(dy, dx)
 			return angle
 		}
-		
+
 		const registerVectorMethods = () => {
 			defineAccessor(
 				Array.prototype,
-				'x',
-				function() {
+				"x",
+				function () {
 					return this[0]
 				},
-				function(value) {
+				function (value) {
 					this[0] = value
 				},
 			)
-		
+
 			defineAccessor(
 				Array.prototype,
-				'y',
-				function() {
+				"y",
+				function () {
 					return this[1]
 				},
-				function(value) {
+				function (value) {
 					this[1] = value
 				},
 			)
-		
+
 			defineAccessor(
 				Array.prototype,
-				'z',
-				function() {
+				"z",
+				function () {
 					return this[2]
 				},
-				function(value) {
+				function (value) {
 					this[2] = value
 				},
 			)
-		
 		}
 
 		HabitatFrogasaurus["./vector.js"].scale = scale
@@ -473,57 +473,58 @@ const HabitatFrogasaurus = {}
 	//====== ./lerp.js ======
 	{
 		HabitatFrogasaurus["./lerp.js"] = {}
-		
+
 		const lerp = ([a, b], distance) => {
 			const range = subtract(b, a)
 			const displacement = scale(range, distance)
 			return add(a, displacement)
 		}
-		
+
 		const bilerp = ([a, b, c, d], displacement) => {
 			const [dx, dy] = displacement
 			const la = lerp([a, b], dx)
 			const lb = lerp([d, c], dx)
-		
+
 			const line = [la, lb]
 			return lerp(line, dy)
 		}
-		
+
 		// based on https://iquilezles.org/articles/ibilinear
 		// adapted by Magnogen https://magnogen.net
 		const ibilerp = ([a, b, c, d], value) => {
-		
 			if (typeof value === "number") {
-				throw new Error(`[Habitat] Sorry, 'ibilerp' doesn't support numbers yet - only vectors... Please contact @todepond :)`)
+				throw new Error(
+					`[Habitat] Sorry, 'ibilerp' doesn't support numbers yet - only vectors... Please contact @todepond :)`,
+				)
 			}
-		
+
 			const e = subtract(b, a)
 			const f = subtract(d, a)
 			const g = add(subtract(a, b), subtract(c, d))
 			const h = subtract(value, a)
-		
+
 			const k2 = crossProduct(g, f)
 			const k1 = crossProduct(e, f) + crossProduct(h, g)
 			const k0 = crossProduct(h, e)
-			
+
 			if (Math.abs(k2) < 0.0001) {
-				const x = (h[0]*k1 + f[0]*k0) / (e[0]*k1 - g[0]*k0)
-				const y = -k0/k1
+				const x = (h[0] * k1 + f[0] * k0) / (e[0] * k1 - g[0] * k0)
+				const y = -k0 / k1
 				return [x, y]
 			}
-		
-			let w = k1*k1 - 4*k0*k2
+
+			let w = k1 * k1 - 4 * k0 * k2
 			w = Math.sqrt(w)
-		
-			const ik2 = 0.5/k2
-			let v = (-k1 - w)*ik2
-			let u = (h[0] - f[0]*v) / (e[0] + g[0]*v)
-		
+
+			const ik2 = 0.5 / k2
+			let v = (-k1 - w) * ik2
+			let u = (h[0] - f[0] * v) / (e[0] + g[0] * v)
+
 			if (u < 0.0 || u > 1.0 || v < 0.0 || v > 1.0) {
-				v = (-k1 + w)*ik2
-				u = (h[0] - f[0]*v) / (e[0] + g[0]*v)
+				v = (-k1 + w) * ik2
+				u = (h[0] - f[0] * v) / (e[0] + g[0] * v)
 			}
-		
+
 			return [u, v]
 		}
 
@@ -536,26 +537,22 @@ const HabitatFrogasaurus = {}
 	{
 		HabitatFrogasaurus["./array.js"] = {}
 		const shuffleArray = (array) => {
-		
 			// Go backwards through the array
 			for (let i = array.length - 1; i > 0; i--) {
-		
 				// Swap each value with a random value before it (which might include itself)
-				const j = Math.floor(Math.random() * (i+1))
+				const j = Math.floor(Math.random() * (i + 1))
 				;[array[i], array[j]] = [array[j], array[i]]
-		
 			}
 			return array
 		}
-		
+
 		const trimArray = (array) => {
-		
 			// If the array is empty just return it
 			if (array.length == 0) return array
-		
+
 			let start = array.length - 1
 			let end = 0
-		
+
 			// Find the first non-undefined index
 			for (let i = 0; i < array.length; i++) {
 				const value = array[i]
@@ -564,7 +561,7 @@ const HabitatFrogasaurus = {}
 					break
 				}
 			}
-		
+
 			// Find the last non-undefined index
 			for (let i = array.length - 1; i >= 0; i--) {
 				const value = array[i]
@@ -573,33 +570,32 @@ const HabitatFrogasaurus = {}
 					break
 				}
 			}
-		
+
 			// Cut off the start and end of the array
 			array.splice(end)
 			array.splice(0, start)
 			return array
 		}
-		
+
 		const repeatArray = (array, count) => {
-		
 			// If count is zero, empty the array
 			if (count === 0) {
 				array.splice(0)
 				return array
 			}
-		
+
 			// If count is less than zero, reverse the array
 			else if (count < 0) {
 				array.reverse()
 				count = Math.abs(count)
 			}
-		
+
 			// Otherwise repeat the array
 			const clone = [...array]
-			for (let i = 0; i < count-1; i++) {
+			for (let i = 0; i < count - 1; i++) {
 				array.push(...clone)
 			}
-		
+
 			return array
 		}
 
@@ -634,26 +630,25 @@ const HabitatFrogasaurus = {}
 	//====== ./stage.js ======
 	{
 		HabitatFrogasaurus["./stage.js"] = {}
-		
+
 		const Stage = function (properties) {
-		
-			const template = struct ({
-				context: undefined, 
+			const template = struct({
+				context: undefined,
 				scale: 1.0,
 				aspectRatio: undefined,
-				
+
 				speed: 1.0,
 				clock: 0.0,
 				paused: false,
-			
+
 				start: () => {},
 				resize: () => {},
 				tick: () => {},
 				update: () => {},
 			})
-		
+
 			const stage = template(properties)
-		
+
 			if (document.body === null) {
 				addEventListener("load", () => {
 					requestAnimationFrame(() => start(stage))
@@ -661,12 +656,11 @@ const HabitatFrogasaurus = {}
 			} else {
 				requestAnimationFrame(() => start(stage))
 			}
-		
+
 			return stage
 		}
-		
+
 		const start = (stage) => {
-				
 			// Create a context + canvas if no context was provided
 			if (stage.context === undefined) {
 				const canvas = document.createElement("canvas")
@@ -676,44 +670,42 @@ const HabitatFrogasaurus = {}
 				document.body.style["margin"] = "0px"
 				document.body.style["overflow"] = "hidden"
 				document.body.appendChild(canvas)
-				stage.context = canvas.getContext("2d")
+				stage.context = canvas.getContext("webgl2")
 			}
-		
+
 			on("resize", () => resize(stage))
-			on(keyDown(" "), () => stage.paused = !stage.paused)
-			
+			on(keyDown(" "), () => (stage.paused = !stage.paused))
+
 			stage.start(stage.context)
 			resize(stage)
 			tick(stage)
-		
 		}
-		
+
 		const resize = (stage) => {
-		
 			let width = innerWidth
 			let height = innerHeight
-			
+
 			if (stage.aspectRatio !== undefined) {
 				const [x, y] = stage.aspectRatio
-				height = innerWidth * y/x
+				height = (innerWidth * y) / x
 				const heightGrowth = height / innerHeight
 				if (heightGrowth > 1.0) {
 					height /= heightGrowth
 					width /= heightGrowth
 				}
 			}
-		
+
 			const scaledWidth = width * stage.scale
 			const scaledHeight = height * stage.scale
-		
-			const {canvas} = stage.context
+
+			const { canvas } = stage.context
 			canvas.width = Math.round(scaledWidth)
 			canvas.height = Math.round(scaledHeight)
 			canvas.style["width"] = canvas.width
 			canvas.style["height"] = canvas.height
-			
-			const marginHorizontal = (innerWidth - scaledWidth)/2
-			const marginVertical = (innerHeight - scaledHeight)/2
+
+			const marginHorizontal = (innerWidth - scaledWidth) / 2
+			const marginVertical = (innerHeight - scaledHeight) / 2
 			canvas.style["margin-left"] = marginHorizontal
 			canvas.style["margin-right"] = marginHorizontal
 			canvas.style["margin-top"] = marginVertical
@@ -727,7 +719,7 @@ const HabitatFrogasaurus = {}
 				stage.tick(stage.context, stage)
 				stage.clock--
 			}
-			
+
 			requestAnimationFrame(() => tick(stage))
 		}
 
@@ -738,7 +730,7 @@ const HabitatFrogasaurus = {}
 	{
 		HabitatFrogasaurus["./async.js"] = {}
 		const sleep = (duration) => {
-			new Promise(resolve => setTimeout(resolve, duration))
+			new Promise((resolve) => setTimeout(resolve, duration))
 		}
 
 		HabitatFrogasaurus["./async.js"].sleep = sleep
@@ -752,28 +744,28 @@ const HabitatFrogasaurus = {}
 			position: [undefined, undefined],
 			down: undefined,
 		}
-		
+
 		const getPointer = () => {
 			if (isPointerTracked) return pointer
 			isPointerTracked = true
-			
+
 			addEventListener("pointermove", (e) => {
 				pointer.position[0] = e.clientX
 				pointer.position[1] = e.clientY
 			})
-		
+
 			addEventListener("pointerdown", (e) => {
 				pointer.position[0] = e.clientX
 				pointer.position[1] = e.clientY
 				pointer.down = true
 			})
-			
+
 			addEventListener("pointerup", (e) => {
 				pointer.position[0] = e.clientX
 				pointer.position[1] = e.clientY
 				pointer.down = false
 			})
-		
+
 			return pointer
 		}
 
@@ -783,7 +775,7 @@ const HabitatFrogasaurus = {}
 	//====== ./keyboard.js ======
 	{
 		HabitatFrogasaurus["./keyboard.js"] = {}
-		
+
 		const keyboard = {}
 		let isKeyboardTracked = false
 		const getKeyboard = () => {
@@ -792,28 +784,28 @@ const HabitatFrogasaurus = {}
 			on("keydown", (e) => {
 				keyboard[e.key] = true
 			})
-			
+
 			on("keyup", (e) => {
 				keyboard[e.key] = false
 			})
-		
+
 			return keyboard
 		}
-		
+
 		let isKeyDownTracked = false
 		const keyDown = (key) => {
 			if (!isKeyDownTracked) {
 				isKeyDownTracked = true
-				on("keydown", (e) => fireEvent(`keyDown("${e.key}")`), {passive: false})
+				on("keydown", (e) => fireEvent(`keyDown("${e.key}")`), { passive: false })
 			}
 			return `keyDown("${key}")`
 		}
-		
+
 		let isKeyUpTracked = false
 		const keyUp = (key) => {
 			if (!isKeyUpTracked) {
 				isKeyUpTracked = true
-				on("keyup", (e) => fireEvent(`keyUp("${e.key}")`), {passive: false})
+				on("keyup", (e) => fireEvent(`keyUp("${e.key}")`), { passive: false })
 			}
 			return `keyUp("${key}")`
 		}
@@ -826,9 +818,10 @@ const HabitatFrogasaurus = {}
 	//====== ./struct.js ======
 	{
 		HabitatFrogasaurus["./struct.js"] = {}
-		const struct = (parameters) => function (args) {
-			return {...parameters, ...args}
-		}
+		const struct = (parameters) =>
+			function (args) {
+				return { ...parameters, ...args }
+			}
 
 		HabitatFrogasaurus["./struct.js"].struct = struct
 	}
@@ -836,7 +829,7 @@ const HabitatFrogasaurus = {}
 	//====== ./colour.js ======
 	{
 		HabitatFrogasaurus["./colour.js"] = {}
-		
+
 		//===========//
 		// UTILITIES //
 		//===========//
@@ -845,13 +838,13 @@ const HabitatFrogasaurus = {}
 			while (number > 999) number -= 1000
 			return number
 		}
-		
+
 		const getThreeDigits = (number) => {
 			const chars = number.toString().padStart(3, "0").split("")
-			const digits = chars.map(v => parseInt(v))
+			const digits = chars.map((v) => parseInt(v))
 			return digits
 		}
-		
+
 		//=========//
 		// CLASSES //
 		//=========//
@@ -863,17 +856,17 @@ const HabitatFrogasaurus = {}
 					this.push(alpha)
 				}
 			}
-		
+
 			toString() {
-				const [red, green, blue, alpha] = this.map(v => v.toString(16).padStart(2, "0"))
+				const [red, green, blue, alpha] = this.map((v) => v.toString(16).padStart(2, "0"))
 				if (this.alpha === 255) {
 					return `#${red}${green}${blue}`
 				}
-		
+
 				return `#${red}${green}${blue}${alpha}`
 			}
 		}
-		
+
 		const Splash = class extends Colour {
 			constructor(number) {
 				const wrappedNumber = wrapSplashNumber(number)
@@ -884,48 +877,48 @@ const HabitatFrogasaurus = {}
 				super(red, green, blue)
 			}
 		}
-		
+
 		//===========//
 		// FUNCTIONS //
 		//===========//
 		const showColour = (colour) => {
 			console.log("%c   ", `background-color: ${new Colour(...colour)}`)
 		}
-		
+
 		//=========//
 		// METHODS //
 		//=========//
 		const registerColourMethods = () => {
-			defineGetter(Array.prototype, "red", function() {
+			defineGetter(Array.prototype, "red", function () {
 				return this[0]
 			})
-		
-			defineGetter(Array.prototype, "green", function() {
+
+			defineGetter(Array.prototype, "green", function () {
 				return this[1]
 			})
-		
-			defineGetter(Array.prototype, "blue", function() {
+
+			defineGetter(Array.prototype, "blue", function () {
 				return this[2]
 			})
-		
-			defineGetter(Array.prototype, "alpha", function() {
+
+			defineGetter(Array.prototype, "alpha", function () {
 				return this[3]
 			})
 		}
-		
+
 		//===========//
 		// CONSTANTS //
 		//===========//
-		const RED_SPLASH_VALUES   = [23, 55, 70,  98, 128, 159, 174, 204, 242, 255]
+		const RED_SPLASH_VALUES = [23, 55, 70, 98, 128, 159, 174, 204, 242, 255]
 		const GREEN_SPLASH_VALUES = [29, 67, 98, 128, 159, 174, 204, 222, 245, 255]
-		const BLUE_SPLASH_VALUES  = [40, 70, 98, 128, 159, 174, 204, 222, 247, 255]
-		
+		const BLUE_SPLASH_VALUES = [40, 70, 98, 128, 159, 174, 204, 222, 247, 255]
+
 		const VOID = new Colour(6, 7, 10)
 		const BLACK = new Splash(0)
 		const GREY = new Splash(112)
 		const SILVER = new Splash(556)
 		const WHITE = new Splash(999)
-		
+
 		const GREEN = new Splash(293)
 		const CYAN = new Splash(269)
 		const BLUE = new Splash(239)
@@ -935,20 +928,12 @@ const HabitatFrogasaurus = {}
 		const RED = new Splash(911)
 		const ORANGE = new Splash(931)
 		const YELLOW = new Splash(991)
-		
-		const HUES = [
-			GREEN, CYAN, BLUE, PURPLE, PINK, CORAL, RED, ORANGE, YELLOW,
-		]
-		
-		const SHADES = [
-			VOID, BLACK, GREY, SILVER, WHITE,
-		]
-		
-		const COLOURS = [
-			...SHADES,
-			...HUES,
-		]
-		
+
+		const HUES = [GREEN, CYAN, BLUE, PURPLE, PINK, CORAL, RED, ORANGE, YELLOW]
+
+		const SHADES = [VOID, BLACK, GREY, SILVER, WHITE]
+
+		const COLOURS = [...SHADES, ...HUES]
 
 		HabitatFrogasaurus["./colour.js"].Colour = Colour
 		HabitatFrogasaurus["./colour.js"].Splash = Splash
@@ -986,55 +971,55 @@ const HabitatFrogasaurus = {}
 	//====== ./mouse.js ======
 	{
 		HabitatFrogasaurus["./mouse.js"] = {}
-		
+
 		let isMouseTracked = false
 		const buttonNames = ["Left", "Middle", "Right", "Back", "Forward"]
 		const mouse = {
 			position: [undefined, undefined],
 		}
-		
+
 		const getMouse = () => {
 			if (isMouseTracked) return mouse
 			isMouseTracked = true
-			
+
 			on("mousemove", (e) => {
 				mouse.position[0] = e.clientX
 				mouse.position[1] = e.clientY
 			})
-		
+
 			on("mousedown", (e) => {
 				mouse.position[0] = e.clientX
 				mouse.position[1] = e.clientY
 				const buttonName = buttonNames[e.button]
 				mouse[buttonName] = true
 			})
-			
+
 			on("mouseup", (e) => {
 				mouse.position[0] = e.clientX
 				mouse.position[1] = e.clientY
 				const buttonName = buttonNames[e.button]
 				mouse[buttonName] = false
 			})
-		
+
 			return mouse
 		}
-		
+
 		let isMouseDownTracked = false
 		const mouseDown = (buttonName) => {
 			const button = buttonNames.indexOf(buttonName)
 			if (!isMouseDownTracked) {
 				isMouseDownTracked = true
-				on("mousedown", (e) => fireEvent(`mouseDown("${e.button}")`), {passive: false})
+				on("mousedown", (e) => fireEvent(`mouseDown("${e.button}")`), { passive: false })
 			}
 			return `mouseDown("${button}")`
 		}
-		
+
 		let isMouseUpTracked = false
 		const mouseUp = (buttonName) => {
 			const button = buttonNames.indexOf(buttonName)
 			if (!isMouseUpTracked) {
 				isMouseUpTracked = true
-				on("mouseup", (e) => fireEvent(`mouseUp("${e.button}")`), {passive: false})
+				on("mouseup", (e) => fireEvent(`mouseUp("${e.button}")`), { passive: false })
 			}
 			return `mouseUp("${button}")`
 		}
@@ -1047,27 +1032,18 @@ const HabitatFrogasaurus = {}
 	//====== ./tween.js ======
 	{
 		HabitatFrogasaurus["./tween.js"] = {}
-		
+
 		const tween = (object, key, options) => {
-			
 			const value = object[key]
-		
-			const {
-				start = value,
-				end = value,
-				duration = 1000,
-				easeIn = 0.0,
-				easeOut = 0.0,
-				ratio = 0.5,
-			} = options
-		
+
+			const { start = value, end = value, duration = 1000, easeIn = 0.0, easeOut = 0.0, ratio = 0.5 } = options
+
 			const startTime = performance.now()
 			const endTime = startTime + duration
-		
-		
+
 			defineGetter(object, key, () => {
 				const currentTime = performance.now()
-		
+
 				if (currentTime >= endTime) {
 					Reflect.defineProperty(object, key, {
 						value: end,
@@ -1077,22 +1053,20 @@ const HabitatFrogasaurus = {}
 					})
 					return end
 				}
-		
+
 				const time = currentTime - startTime
 				const interpolation = ease(time / duration, {
 					easeIn,
 					easeOut,
-					ratio: 1-ratio,
+					ratio: 1 - ratio,
 				})
 				return lerp([start, end], interpolation)
-		
 			})
-		
 		}
-		
-		const ease = (t, {easeIn, easeOut, ratio}) => {
+
+		const ease = (t, { easeIn, easeOut, ratio }) => {
 			const f = (t, slope) => t ** (1.0 + slope)
-			return f(t*ratio*2, easeIn)/(f(t*ratio*2, easeIn) + f((1-t)*(1-ratio)*2, easeOut))
+			return f(t * ratio * 2, easeIn) / (f(t * ratio * 2, easeIn) + f((1 - t) * (1 - ratio) * 2, easeOut))
 		}
 
 		HabitatFrogasaurus["./tween.js"].tween = tween
@@ -1101,28 +1075,28 @@ const HabitatFrogasaurus = {}
 	//====== ./touch.js ======
 	{
 		HabitatFrogasaurus["./touch.js"] = {}
-		
+
 		const touches = []
-		
+
 		let isTouchTracked = false
 		const getTouches = () => {
 			if (!isTouchTracked) {
 				isTouchTracked = true
-		
-				on("touchstart", e => {
+
+				on("touchstart", (e) => {
 					for (const changedTouch of e.changedTouches) {
 						const id = changedTouch.identifier
 						if (touches[id] === undefined) {
-							touches[id] = {position: [undefined, undefined]}
+							touches[id] = { position: [undefined, undefined] }
 						}
-						
+
 						const touch = touches[id]
 						touch.position[0] = changedTouch.clientX
 						touch.position[1] = changedTouch.clientY
 					}
 				})
-				
-				on("touchmove", e => {
+
+				on("touchmove", (e) => {
 					for (const changedTouch of e.changedTouches) {
 						const id = changedTouch.identifier
 						const touch = touches[id]
@@ -1130,16 +1104,15 @@ const HabitatFrogasaurus = {}
 						touch.position[1] = changedTouch.clientY
 					}
 				})
-				
-				on("touchend", e => {
+
+				on("touchend", (e) => {
 					for (const changedTouch of e.changedTouches) {
 						const id = changedTouch.identifier
 						touches[id] = undefined
 					}
 				})
-		
 			}
-		
+
 			return touches
 		}
 
@@ -1164,7 +1137,6 @@ const HabitatFrogasaurus = {}
 	const { keyDown } = HabitatFrogasaurus["./keyboard.js"]
 	const { on, fireEvent } = HabitatFrogasaurus["./event.js"]
 	const { lerp } = HabitatFrogasaurus["./lerp.js"]
-
 }
 
 //=========//
