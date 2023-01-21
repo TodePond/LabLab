@@ -4,11 +4,6 @@ precision highp float;
 uniform vec2 resolution;
 out vec4 colour;
 
-/*
-VOID, BLACK, GREY, SILVER, WHITE, GREEN, CYAN, BLUE, PURPLE, PINK, CORAL, RED, ORANGE, YELLOW
-#06070a, #171d28, #374362, #9faecc, #ffffff, #46ff80, #46ccff, #4680ff, #8043f7, #ff80de, #ff8080, #ff4346, #ff8046, #ffff46
-*/
-
 const vec4 VOID = vec4(6.0 / 255.0, 7.0 / 255.0, 10.0 / 255.0, 1.0);
 const vec4 BLACK = vec4(23.0 / 255.0, 29.0 / 255.0, 40.0 / 255.0, 1.0);
 const vec4 GREY = vec4(55.0 / 255.0, 70.0 / 255.0, 98.0 / 255.0, 1.0);
