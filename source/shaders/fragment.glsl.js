@@ -66,11 +66,15 @@ float pulse(float value) {
 	return pulse(value, 1.0);
 }
 
+vec2 canvasToView(vec2 position) {
+	return position / resolution;
+}
+
 void main() {
 
-	vec2 position = gl_FragCoord.xy / resolution;
-	vec2 pointer = pointer / resolution;
+	vec2 position = canvasToView(gl_FragCoord.xy);
+	vec2 pointer = canvasToView(pointer);
 
-	colour = gradient(pulse(distance(position, pointer) * 10.0), 1.0);
+	colour = gradient(distance(position, pointer));
 }
 `
