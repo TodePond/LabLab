@@ -6,7 +6,7 @@ import { createProgramFromSources } from "./utilities/shader.js"
 registerMethods()
 window.print = print
 
-const stage = new Stage()
+const stage = new Stage({ paused: false })
 stage.start = (gl) => {
 	stage.program = createProgramFromSources(gl, vertexShaderSource, fragmentShaderSource)
 	gl.useProgram(stage.program)

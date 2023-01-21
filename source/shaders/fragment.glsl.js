@@ -34,18 +34,28 @@ const vec4[] GRADIENT = vec4[](
 	GREEN,
 	BLUE,
 	PURPLE,
-	PINK
+	PINK,
+	GREEN
 );
 
+vec4 gradient(float t, float offset) {
+	t = fract(t + offset);
+	float index = t * float(GRADIENT.length() - 1);
+	int i = int(index);
+	float f = fract(index);
+	return bilerp(GRADIENT[i], GRADIENT[i + 1], GRADIENT[i], GRADIENT[i + 1], vec2(f, 0.0));
+}
+
 vec4 gradient(float t) {
-	int length = GRADIENT.length();
-	int index = int(t * float(length - 1));
-	float t2 = t * float(length - 1) - float(index);
-	return lerp(GRADIENT[index], GRADIENT[index + 1], t2);
+	return gradient(t, 0.0);
 }
 
 vec4 average(vec4 a, vec4 b) {
 	return lerp(a, b, 0.5);
+}
+
+float pulse(float value) {
+	return value * ((time) + 1.0);
 }
 
 void main() {
@@ -53,6 +63,7 @@ void main() {
 	vec2 position = gl_FragCoord.xy / resolution;
 	vec2 pointer = pointer / resolution;
 
-	colour = gradient(distance(position, pointer) * 0.6);
+	float t = distance(position, pointer);
+	colour = gradient(t * time / 0.01, -time / 0.5);
 }
 `
