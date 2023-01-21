@@ -54,8 +54,12 @@ vec4 average(vec4 a, vec4 b) {
 	return lerp(a, b, 0.5);
 }
 
+float pulse(float value, float speed) {
+	return value * (sin(time * speed) + 1.0) / 2.0;
+}
+
 float pulse(float value) {
-	return value * ((time) + 1.0);
+	return pulse(value, 1.0);
 }
 
 void main() {
@@ -63,7 +67,6 @@ void main() {
 	vec2 position = gl_FragCoord.xy / resolution;
 	vec2 pointer = pointer / resolution;
 
-	float t = distance(position, pointer);
-	colour = gradient(t * time / 0.01, -time / 0.5);
+	colour = gradient(distance(position, pointer), pulse(1.0));
 }
 `
