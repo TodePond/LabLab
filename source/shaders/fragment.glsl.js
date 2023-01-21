@@ -8,17 +8,12 @@ out vec4 outColor;
 void main() {
 
 	vec2 position = gl_FragCoord.xy / u_resolution;
-	float x = position.x;
-	float y = position.y;
+	vec4 colour = vec4(1.0, 1.0, 1.0, 1.0);
 
-	float red = 1.0;
-	float green = 1.0;
-	float blue = 1.0;
-	float alpha = 1.0;
-
-	red = x;
-	green = y;
-
-	outColor = vec4(red, green, blue, alpha);
+	colour.x = position.x;
+	colour.y = position.y;
+	colour.z = 0.5;
+	
+	outColor = vec4(colour);
 }
 `
