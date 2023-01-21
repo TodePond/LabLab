@@ -3,6 +3,8 @@ precision highp float;
 
 uniform vec2 resolution;
 uniform vec2 pointer;
+uniform vec2 pan;
+uniform float zoom;
 uniform float time;
 
 out vec4 colour;
@@ -106,7 +108,7 @@ vec4 mandelbrot(vec2 position) {
 		float end = -(y * y);
 
 		z = vec2(start + end, middle) + c;
-		excess = z.x * z.x + z.y * z.y - (pointer.x * 25.0);
+		excess = z.x * z.x + z.y * z.y - 3.0;
 		if (excess > 0.0) {
 			break;	
 		}
@@ -116,7 +118,7 @@ vec4 mandelbrot(vec2 position) {
 		return VOID;
 	}
 
-	return gradientLoop(i / max + excess / (pointer.y * 25.0));
+	return gradientLoop(i / max + excess / 12.5);
 }
 
 vec4 getColour(vec2 position) {
@@ -125,7 +127,7 @@ vec4 getColour(vec2 position) {
 
 void main() {
 	vec2 position = canvasToView(gl_FragCoord.xy);
-	vec2 adjustedPosition = (position - vec2(0.6, 0.5)) * 3.0;
+	vec2 adjustedPosition = (position - pan) * zoom;
 	colour = getColour(adjustedPosition);
 }
 `
