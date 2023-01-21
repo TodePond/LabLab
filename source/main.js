@@ -38,34 +38,34 @@ stage.start = (gl) => {
 	gl.enableVertexAttribArray(stage.locations.position)
 
 	stage.pointer = getPointer()
+	stage.pointer.position.x = stage.context.canvas.width / 0.2
+	stage.pointer.position.y = stage.context.canvas.height / 0.2
 	stage.keyboard = getKeyboard()
 	stage.keyboard.d = false
-	stage.pan = [0.6, 0.5]
+	stage.pan = [-0.6, -0.5]
 	stage.zoom = 3.0
 }
 
 stage.update = (gl, time) => {
 	const PAN_SPEED = 0.01
-	const ZOOM_SPEED = 0.01
+	const ZOOM_SPEED = 1.01
 	if (stage.keyboard["d"]) {
-		stage.pan.x -= PAN_SPEED
-	} else if (stage.keyboard["a"]) {
 		stage.pan.x += PAN_SPEED
+	} else if (stage.keyboard["a"]) {
+		stage.pan.x -= PAN_SPEED
 	}
 
 	if (stage.keyboard["w"]) {
-		stage.zoom -= ZOOM_SPEED
-
-		// Adjust pan to keep the pointer in the same place.
-		const pointer = stage.pointer.position
-		const pan = stage.pan
-		const zoom = ZOOM_SPEED
-		const x = pointer.x / gl.canvas.width
-		const y = pointer.y / gl.canvas.height
-		pan.x -= (x - 0.5) * zoom
-		pan.y -= (y - 0.5) * zoom
+		stage.pan.y += PAN_SPEED
 	} else if (stage.keyboard["s"]) {
-		stage.zoom += ZOOM_SPEED
+		stage.pan.y -= PAN_SPEED
+	}
+
+	if (stage.keyboard["e"]) {
+		// Pan to ensure we zoom into the center of the screen.
+		stage.zoom /= ZOOM_SPEED
+	} else if (stage.keyboard["q"]) {
+		stage.zoom *= ZOOM_SPEED
 	}
 
 	gl.clearColor(0, 0, 0, 0)
