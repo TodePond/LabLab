@@ -32,7 +32,7 @@ vec4 bilerp(vec4 a, vec4 b, vec4 c, vec4 d, vec2 t) {
 	return lerp(lerp(a, b, t.x), lerp(c, d, t.x), t.y);
 }
 
-const vec4[] GRADIENT = vec4[](
+/*const vec4[] GRADIENT = vec4[](
 	GREEN,
 	CYAN,
 	BLUE,
@@ -42,7 +42,45 @@ const vec4[] GRADIENT = vec4[](
 	RED,
 	ORANGE,
 	YELLOW
+);*/
+
+/*const vec4[] GRADIENT = vec4[](
+	VOID,
+	BLACK,
+	GREY,
+	SILVER,
+	WHITE,
+	GREEN,
+	CYAN,
+	BLUE,
+	PURPLE,
+	PINK,
+	CORAL,
+	RED,
+	ORANGE,
+	YELLOW
+);*/
+
+// This is a cool one! it doesn't use many colours but it looks epic
+/*const vec4[] GRADIENT = vec4[](
+	VOID,
+	BLACK,
+	GREY,
+	SILVER,
+	WHITE,
+	RED,
+	ORANGE,
+	YELLOW
+);*/
+
+// Trans rights!
+const vec4[] GRADIENT = vec4[](
+	BLUE,
+	GREEN,
+	RED,
+	BLACK
 );
+
 
 vec4 gradient(float t, float offset) {
 	t = t + offset;
