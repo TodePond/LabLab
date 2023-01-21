@@ -21,7 +21,7 @@ stage.start = (gl) => {
 	const vao = gl.createVertexArray()
 	gl.bindVertexArray(vao)
 
-	const positionAttributeLocation = gl.getAttribLocation(program, "a_position")
+	const positionAttributeLocation = gl.getAttribLocation(program, "position")
 	gl.enableVertexAttribArray(positionAttributeLocation)
 
 	const size = 2
