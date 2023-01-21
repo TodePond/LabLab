@@ -9,7 +9,7 @@ export const createShader = (gl, type, source) => {
 	return shader
 }
 
-export const createProgram = (gl, vertexShader, fragmentShader) => {
+export const createProgramFromShaders = (gl, vertexShader, fragmentShader) => {
 	const program = gl.createProgram()
 	gl.attachShader(program, vertexShader)
 	gl.attachShader(program, fragmentShader)
@@ -19,4 +19,10 @@ export const createProgram = (gl, vertexShader, fragmentShader) => {
 		throw Error(gl.getProgramInfoLog(program))
 	}
 	return program
+}
+
+export const createProgramFromSources = (gl, vertexShaderSource, fragmentShaderSource) => {
+	const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource)
+	const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource)
+	return createProgramFromShaders(gl, vertexShader, fragmentShader)
 }
