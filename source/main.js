@@ -1,4 +1,4 @@
-import { getPointer, print, registerMethods, Stage } from "../libraries/habitat-import.js"
+import { getPointer, on, print, registerMethods, Stage } from "../libraries/habitat-import.js"
 import { fragmentShaderSource } from "./shaders/fragment.glsl.js"
 import { vertexShaderSource } from "./shaders/vertex.glsl.js"
 import { createProgramFromSources } from "./utilities/shader.js"
@@ -55,3 +55,11 @@ stage.resize = (gl) => {
 	gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
 	gl.uniform2f(stage.locations.resolution, gl.canvas.width, gl.canvas.height)
 }
+
+on(
+	"touchmove",
+	(e) => {
+		e.preventDefault()
+	},
+	{ passive: false },
+)
