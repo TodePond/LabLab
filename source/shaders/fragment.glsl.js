@@ -32,14 +32,19 @@ vec4 bilerp(vec4 a, vec4 b, vec4 c, vec4 d, vec2 t) {
 
 const vec4[] GRADIENT = vec4[](
 	GREEN,
+	CYAN,
 	BLUE,
 	PURPLE,
 	PINK,
+	CORAL,
+	RED,
+	ORANGE,
+	YELLOW,
 	GREEN
 );
 
 vec4 gradient(float t, float offset) {
-	t = fract(t + offset);
+	t = t + offset;
 	float index = t * float(GRADIENT.length() - 1);
 	int i = int(index);
 	float f = fract(index);
@@ -50,16 +55,25 @@ vec4 gradient(float t) {
 	return gradient(t, 0.0);
 }
 
+vec4 gradientLoop(float t, float offset) {
+	t = fract(t + offset);
+	return gradient(t, offset);
+}
+
+vec4 gradientLoop(float t) {
+	return gradientLoop(t, 0.0);
+}
+
 vec4 average(vec4 a, vec4 b) {
 	return lerp(a, b, 0.5);
 }
 
 float pulse(float value, float speed, float offset) {
-	return value * (sin(offset + time * speed) + 1.0) / 2.0;
+	return value * (sin((time + offset) * speed) + 1.0) / 2.0;
 }
 
 float pulse(float value, float speed) {
-	return pulse(value, speed, 0.0);
+	return pulse(value, speed, 1.0);
 }
 
 float pulse(float value) {
@@ -70,11 +84,35 @@ vec2 canvasToView(vec2 position) {
 	return position / resolution;
 }
 
+vec4 mandelbrot(vec2 position) {
+	vec2 c = position;
+	vec2 z = vec2(0.0, 0.0);
+	float i = 0.0;
+	float max = 50.0;
+	for (i = 0.0; i < max; i += 1.0) {
+
+		float x = z.x;
+		float y = z.y;
+
+		float start = x * x;
+		float middle = 2.0 * x * y;
+		float end = -(y * y);
+
+		z = vec2(start + end, middle) + c;
+		if (z.x * z.x + z.y * z.y > 4.0) {
+			break;
+		}
+	}
+	return gradientLoop(i / max);
+}
+
+vec4 getColour(vec2 position) {
+	return mandelbrot(position);
+}
+
 void main() {
-
 	vec2 position = canvasToView(gl_FragCoord.xy);
-	vec2 pointer = canvasToView(pointer);
-
-	colour = gradient(distance(position, pointer));
+	vec2 adjustedPosition = (position - vec2(0.73, 0.5)) * 3.0;
+	colour = getColour(adjustedPosition);
 }
 `
