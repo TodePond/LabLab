@@ -11,8 +11,14 @@ void main() {
 	float x = position.x;
 	float y = position.y;
 
-	float red = x;
-	float green = y;
-	outColor = vec4(red, green, 0.5, 1);
+	float red = 1.0;
+	float green = 1.0;
+	float blue = 1.0;
+	float alpha = 1.0;
+
+	red = x;
+	green = y;
+
+	outColor = vec4(red, green, blue, alpha);
 }
 `
