@@ -1,4 +1,4 @@
-import { print, registerMethods, Stage } from "../libraries/habitat-import.js"
+import { getPointer, print, registerMethods, Stage } from "../libraries/habitat-import.js"
 import { fragmentShaderSource } from "./shaders/fragment.glsl.js"
 import { vertexShaderSource } from "./shaders/vertex.glsl.js"
 import { createProgramFromSources } from "./utilities/shader.js"
@@ -24,6 +24,7 @@ stage.start = (gl) => {
 		position: gl.getAttribLocation(stage.program, "position"),
 		resolution: gl.getUniformLocation(stage.program, "resolution"),
 		time: gl.getUniformLocation(stage.program, "time"),
+		pointer: gl.getUniformLocation(stage.program, "pointer"),
 	}
 
 	const size = 2
@@ -33,6 +34,8 @@ stage.start = (gl) => {
 	const offset = 0
 	gl.vertexAttribPointer(stage.locations.position, size, type, normalise, stride, offset)
 	gl.enableVertexAttribArray(stage.locations.position)
+
+	stage.pointer = getPointer()
 }
 
 stage.update = (gl, time) => {
@@ -40,6 +43,7 @@ stage.update = (gl, time) => {
 	gl.clear(gl.COLOR_BUFFER_BIT)
 
 	gl.uniform1f(stage.locations.time, time * 0.001)
+	gl.uniform2f(stage.locations.pointer, stage.pointer.position.x, gl.canvas.height - stage.pointer.position.y)
 
 	const primitiveType = gl.TRIANGLES
 	const offset = 0

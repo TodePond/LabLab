@@ -2,6 +2,7 @@ export const fragmentShaderSource = `#version 300 es
 precision highp float;
 
 uniform vec2 resolution;
+uniform vec2 pointer;
 uniform float time;
 
 out vec4 colour;
@@ -33,7 +34,7 @@ const vec4[] GRADIENT = vec4[](
 	GREEN,
 	BLUE,
 	PURPLE,
-	RED
+	PINK
 );
 
 vec4 gradient(float t) {
@@ -50,7 +51,8 @@ vec4 average(vec4 a, vec4 b) {
 void main() {
 
 	vec2 position = gl_FragCoord.xy / resolution;
+	vec2 pointer = pointer / resolution;
 
-	colour = lerp(gradient(position.x), gradient(position.y), (sin(time) + 1.0) / 2.0);
+	colour = gradient(distance(position, pointer) * 0.6);
 }
 `
