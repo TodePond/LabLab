@@ -128,7 +128,7 @@ vec4 getColour(vec2 position) {
 
 void main() {
 	vec2 position = canvasToView(gl_FragCoord.xy);
-	vec2 adjustedPosition = (position + pan) * zoom;
+	vec2 adjustedPosition = (position * zoom) + pan;
 	colour = getColour(adjustedPosition);
 }
 `

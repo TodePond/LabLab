@@ -42,7 +42,8 @@ stage.start = (gl) => {
 	stage.pointer.position.y = stage.context.canvas.height / 0.2
 	stage.keyboard = getKeyboard()
 	stage.keyboard.d = false
-	stage.pan = [-0.6, -0.5]
+	stage.pan = [-2.0, -1.5]
+	//stage.pan = [0.0, 0.0]
 	stage.zoom = 3.0
 }
 
@@ -50,21 +51,26 @@ stage.update = (gl, time) => {
 	const PAN_SPEED = 0.01
 	const ZOOM_SPEED = 1.01
 	if (stage.keyboard["d"]) {
-		stage.pan.x += PAN_SPEED
+		stage.pan.x += PAN_SPEED * stage.zoom
 	} else if (stage.keyboard["a"]) {
-		stage.pan.x -= PAN_SPEED
+		stage.pan.x -= PAN_SPEED * stage.zoom
 	}
 
 	if (stage.keyboard["w"]) {
-		stage.pan.y += PAN_SPEED
+		stage.pan.y += PAN_SPEED * stage.zoom
 	} else if (stage.keyboard["s"]) {
-		stage.pan.y -= PAN_SPEED
+		stage.pan.y -= PAN_SPEED * stage.zoom
 	}
 
 	if (stage.keyboard["e"]) {
-		// Pan to ensure we zoom into the center of the screen.
+		// Zoom into center, not bottom-left corner
+		stage.pan.x -= (1 - ZOOM_SPEED) * stage.zoom * 0.5
+		stage.pan.y -= (1 - ZOOM_SPEED) * stage.zoom * 0.5
 		stage.zoom /= ZOOM_SPEED
 	} else if (stage.keyboard["q"]) {
+		// Zoom out from center, not bottom-left corner
+		stage.pan.x += (1 - ZOOM_SPEED) * stage.zoom * 0.5
+		stage.pan.y += (1 - ZOOM_SPEED) * stage.zoom * 0.5
 		stage.zoom *= ZOOM_SPEED
 	}
 
