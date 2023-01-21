@@ -32,6 +32,7 @@ vec4 bilerp(vec4 a, vec4 b, vec4 c, vec4 d, vec2 t) {
 const vec4[] GRADIENT = vec4[](
 	GREEN,
 	BLUE,
+	PURPLE,
 	RED
 );
 
@@ -50,6 +51,6 @@ void main() {
 
 	vec2 position = gl_FragCoord.xy / resolution;
 
-	colour = lerp(gradient(position.x), gradient(position.y), sin(time));
+	colour = lerp(gradient(position.x), gradient(position.y), (sin(time) + 1.0) / 2.0);
 }
 `
