@@ -39,8 +39,7 @@ const vec4[] GRADIENT = vec4[](
 	CORAL,
 	RED,
 	ORANGE,
-	YELLOW,
-	GREEN
+	YELLOW
 );
 
 vec4 gradient(float t, float offset) {
@@ -86,9 +85,9 @@ vec2 canvasToView(vec2 position) {
 
 vec4 mandelbrot(vec2 position) {
 	vec2 c = position;
-	vec2 z = vec2(0.0, 0.0);
+	vec2 z = vec2(0.0, 0.0 + pulse(1.0));
 	float i = 0.0;
-	float max = 50.0;
+	float max = 45.0;
 	for (i = 0.0; i < max; i += 1.0) {
 
 		float x = z.x;
@@ -99,10 +98,15 @@ vec4 mandelbrot(vec2 position) {
 		float end = -(y * y);
 
 		z = vec2(start + end, middle) + c;
-		if (z.x * z.x + z.y * z.y > 4.0) {
+		if (z.x * z.x + z.y * z.y > 10.0) {
 			break;
 		}
 	}
+
+	if (i >= max) {
+		return VOID;
+	}
+
 	return gradientLoop(i / max);
 }
 
